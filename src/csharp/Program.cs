@@ -2,6 +2,8 @@
 using Demo;
 using Google.Protobuf;
 using System.IO;
+using Grpc.Core;
+using ServiceDemo;
 
 namespace csharp
 {
@@ -33,8 +35,24 @@ namespace csharp
                         greeting = Greeting.Parser.ParseFrom(inputFile);
 
                         Console.WriteLine(greeting);
+                        Console.WriteLine(greeting.GreetingType);
                     }
                 }
+            }
+            else
+            {
+                var channel = new Channel("localhost:6789", ChannelCredentials.Insecure);
+                var client = new GreetingService.GreetingServiceClient(channel);
+
+                var name = new Name
+                {
+                    FirstName = "john",
+                    LastName = "doe",
+                };
+
+                Console.WriteLine("Saying hi to the server");
+                var greeting = client.SayHi(name);
+                Console.WriteLine($"Response: {greeting}");
             }
         }
     }
