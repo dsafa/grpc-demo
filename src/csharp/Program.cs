@@ -1,9 +1,12 @@
-﻿using System;
+﻿// #define grpc
+using System;
 using Demo;
 using Google.Protobuf;
 using System.IO;
 using Grpc.Core;
+#if grpc
 using ServiceDemo;
+#endif
 
 namespace csharp
 {
@@ -21,14 +24,14 @@ namespace csharp
                 };
                 greeting.GreetingType = Greeting.Types.GreetingType.Morning;
 
-                if (args.Length > 1 && args[1] == "output")
+                if (args.Length > 1 && args[1] == "create")
                 {
                     using (var file = File.Create("greeting.dat"))
                     {
                         greeting.WriteTo(file);
                     }
                 }
-                else
+                else if (args.Length > 1 && args[1] == "read")
                 {
                     using (var inputFile = File.OpenRead("greeting.dat"))
                     {
@@ -39,6 +42,7 @@ namespace csharp
                     }
                 }
             }
+            #if grpc
             else
             {
                 var channel = new Channel("localhost:6789", ChannelCredentials.Insecure);
@@ -54,6 +58,7 @@ namespace csharp
                 var greeting = client.SayHi(name);
                 Console.WriteLine($"Response: {greeting}");
             }
+            #endif
         }
     }
 }
