@@ -1,0 +1,8 @@
+syntax = "proto3";
+import "greeting.proto";
+
+package service_demo;
+
+service GreetingService {
+    rpc SayHi(demo.Name) returns (demo.Greeting);
+}

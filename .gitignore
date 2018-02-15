@@ -480,6 +480,6 @@ venv.bak/
 
 # protobuf gprc
 **/[Gg]reeting*
-!**/greeting.proto
+!**/greeting*.proto
 **/*.dat
 !src/tools
